@@ -6,7 +6,7 @@
 <title>WC26 Draft Challenge — Live Standings</title>
 <style>
   :root{
-    --bg:#0a0e0a; --panel:#11161180; --panel2:#0e130e; --line:#1f2a1f;
+    --bg:#0a0e0a; --panel2:#0e130e; --line:#1f2a1f;
     --ink:#e8f0e8; --mut:#7e8c7e; --acc:#22c55e; --gold:#facc15;
     --mono:'SFMono-Regular',ui-monospace,'Cascadia Code',Menlo,Consolas,monospace;
   }
@@ -19,8 +19,7 @@
     radial-gradient(900px 500px at -10% 10%, #1a2e1a30, transparent), var(--bg);}
   .wrap{max-width:1040px;margin:0 auto;padding:28px 20px 80px}
   .mono{font-family:var(--mono)}
-  .eyebrow{font-family:var(--mono);letter-spacing:.34em;text-transform:uppercase;
-    font-size:12px;color:var(--mut)}
+  .eyebrow{font-family:var(--mono);letter-spacing:.34em;text-transform:uppercase;font-size:12px;color:var(--mut)}
   h1.title{font-weight:900;line-height:.92;letter-spacing:-.02em;margin:.25em 0 .15em;
     font-size:clamp(40px,8vw,86px);text-transform:uppercase}
   h1.title .g{color:var(--acc)}
@@ -35,6 +34,7 @@
   h2.sec{font-weight:900;text-transform:uppercase;letter-spacing:-.01em;
     font-size:clamp(26px,4.5vw,40px);margin:0 0 4px}
   .sub{color:var(--mut);font-size:14px;margin:0 0 18px;line-height:1.5}
+  .sub b{color:#b9c6b9}
 
   /* Standings */
   .stand{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel2)}
@@ -47,17 +47,14 @@
   .who{display:flex;align-items:center;gap:12px;min-width:0}
   .dot{width:11px;height:11px;border-radius:50%;flex:none;box-shadow:0 0 0 3px #ffffff10}
   .name{font-weight:800;font-size:19px;letter-spacing:.02em}
-  .meta{font-family:var(--mono);font-size:11.5px;color:var(--mut);margin-top:3px;
-    display:flex;gap:12px;flex-wrap:wrap}
+  .meta{font-family:var(--mono);font-size:11.5px;color:var(--mut);margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
   .meta .live{color:var(--acc)}
   .pts{font-family:var(--mono);font-weight:800;font-size:30px;text-align:right;line-height:1}
   .pts small{display:block;font-size:10px;font-weight:700;letter-spacing:.2em;color:var(--mut)}
-  .delta{font-family:var(--mono);font-size:11px;color:var(--acc);text-align:right;margin-top:4px}
 
-  /* Generic cards grid */
+  /* Cards grid */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-  .card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--panel2);
-    border-left-width:4px}
+  .card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--panel2);border-left-width:4px}
   .card .ch{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
   .card .nm{font-weight:800;font-size:17px;letter-spacing:.03em}
   .card .tot{font-family:var(--mono);font-weight:800;font-size:20px}
@@ -67,15 +64,29 @@
     font-size:13.5px;padding:4px 0;border-top:1px dashed #ffffff0e}
   .t:first-child{border-top:0}
   .t .tn{display:flex;align-items:center;gap:8px;min-width:0}
-  .t .tn .lbl{font-family:var(--mono);font-size:9px;font-weight:700;color:#06100a;
-    padding:1px 5px;border-radius:4px;letter-spacing:.05em}
-  .t.outt{opacity:.45}
+  .t .tn .lbl{font-family:var(--mono);font-size:9px;font-weight:700;color:#06100a;padding:1px 5px;border-radius:4px;letter-spacing:.05em}
+  .t.outt{opacity:.42}
   .t.outt .tn b{text-decoration:line-through}
-  .t .stg{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--mut);
-    text-transform:uppercase}
+  .t .stg{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--mut);text-transform:uppercase}
   .t .tp{font-family:var(--mono);font-weight:700;font-size:13px;width:30px;text-align:right}
-  .badge-adv{color:var(--acc)}
-  .badge-out{color:#c2554e}
+  .badge-adv{color:var(--acc)} .badge-out{color:#c2554e}
+
+  /* Fixtures */
+  .fxgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+  .fxcard{border:1px solid var(--line);border-radius:12px;padding:11px 14px;background:var(--panel2)}
+  .fxcard.civil{border-color:#5a4d18;background:linear-gradient(180deg,#181408,transparent)}
+  .fxhead{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);
+    font-size:10px;color:var(--mut);letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px}
+  .fxhead .tag{color:var(--gold);font-weight:700}
+  .fxrow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+  .fxside{display:flex;flex-direction:column;gap:5px;min-width:0;align-items:flex-start}
+  .fxside.r{align-items:flex-end;text-align:right}
+  .fxown{align-self:flex-start} .fxside.r .fxown{align-self:flex-end}
+  .fxnm{font-weight:700;font-size:14.5px;line-height:1.1}
+  .fxnm.win{color:var(--acc)} .fxnm.lose{opacity:.45;text-decoration:line-through}
+  .fxown{font-family:var(--mono);font-size:9px;font-weight:700;color:#06100a;padding:1px 6px;border-radius:4px;letter-spacing:.05em}
+  .vsbadge{font-family:var(--mono);font-size:10px;color:var(--mut);padding:0 2px}
+  .score{font-family:var(--mono);font-weight:800;font-size:14px}
 
   /* Rules */
   .rules{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -88,27 +99,29 @@
     padding:12px 16px;margin-top:16px;font-size:13.5px;color:#b9c6b9;line-height:1.5}
   .note b{color:var(--ink)}
 
-  /* Admin */
+  /* Scorekeeper */
   .adminbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
   button{font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;border-radius:9px;
     border:1px solid var(--line);background:#162016;color:var(--ink);padding:9px 14px}
   button:hover{border-color:var(--acc)}
   button.go{background:var(--acc);color:#06100a;border-color:var(--acc)}
   .hidden{display:none!important}
-  .adminPanel{border:1px solid var(--line);border-radius:14px;padding:4px 0;background:var(--panel2)}
-  .arow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;
-    padding:9px 16px;border-top:1px solid var(--line)}
-  .arow:first-child{border-top:0}
-  .arow .an{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600}
-  .arow select{font-family:var(--mono);font-size:12px;background:#0c120c;color:var(--ink);
-    border:1px solid var(--line);border-radius:7px;padding:6px 8px}
-  .arow .ap{font-family:var(--mono);font-weight:700;width:42px;text-align:right;color:var(--acc)}
-  .selwin{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  input[type=text]{font-family:var(--mono);background:#0c120c;color:var(--ink);
-    border:1px solid var(--line);border-radius:7px;padding:7px 9px;font-size:13px}
-  .foot{color:var(--mut);font-size:12px;font-family:var(--mono);margin-top:40px;
-    text-align:center;line-height:1.7}
-  .foot a{color:var(--acc);text-decoration:none}
+  .adminPanel{border:1px solid var(--line);border-radius:14px;padding:8px 14px 16px;background:var(--panel2)}
+  .rndhead{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);margin:18px 0 8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+  .mrow{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;padding:6px 0}
+  .pick{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;
+    padding:8px 10px;background:#0c120c;cursor:pointer;font-size:13.5px;font-weight:600;min-width:0}
+  .pick.r{flex-direction:row-reverse;text-align:right}
+  .pick:hover{border-color:#3a4a3a}
+  .pick.sel{border-color:var(--acc);background:#10210f;color:var(--acc)}
+  .pick.tbd{opacity:.4;cursor:default}
+  .pick .pdot{width:9px;height:9px;border-radius:50%;flex:none}
+  .pick .pown{font-family:var(--mono);font-size:8.5px;font-weight:700;color:#06100a;padding:1px 5px;border-radius:4px}
+  .mvs{font-family:var(--mono);font-size:10px;color:var(--mut);text-align:center}
+  .gbbox{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0 4px}
+  input[type=text]{font-family:var(--mono);background:#0c120c;color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:7px 9px;font-size:13px}
+  .foot{color:var(--mut);font-size:12px;font-family:var(--mono);margin-top:40px;text-align:center;line-height:1.7}
   @media(max-width:640px){
     .rules{grid-template-columns:1fr}
     .pts{font-size:26px}
@@ -121,7 +134,7 @@
 
   <div class="eyebrow">2026 FIFA World Cup · 8-Person Draft Challenge</div>
   <h1 class="title">Every match is<br><span class="g">one of us.</span></h1>
-  <p class="lede">All <b>48 teams</b> drafted across the eight of you. <b>Group stage complete and independently verified</b> against official results — every point reconciled. <b>Round of 32 is locked in:</b> the 32 survivors each banked +3, the other 16 are out (their points stand). Standings update live as the bracket plays out.</p>
+  <p class="lede">All <b>48 teams</b> drafted across the eight of you. <b>Group stage complete and independently verified</b> against official results. <b>Round of 32 is set</b> — the 32 survivors banked +3, the other 16 are out (points stand). Pick winners as the bracket plays out and the standings move live.</p>
 
   <div class="chips" id="chips"></div>
   <div class="updated">● LIVE — <b id="phase">Round of 32</b> · last updated <span id="updated"></span></div>
@@ -134,17 +147,23 @@
 
   <hr class="sep" />
 
+  <h2 class="sec">Round of 32 · Fixtures</h2>
+  <p class="sub">Who plays whom, Jun 28 – Jul 3. Every winner banks <b>+5</b> (reaching the Round of 16). <span style="color:var(--gold)">★ CIVIL WAR = one owner owns both sides.</span></p>
+  <div id="fixtures"></div>
+
+  <hr class="sep" />
+
   <h2 class="sec">The Squads</h2>
-  <p class="sub">Six teams each. <span class="badge-adv">Green = still alive.</span> <span class="badge-out">Struck-through = eliminated</span> (points already banked).</p>
+  <p class="sub"><span class="badge-adv">Green = still alive.</span> <span class="badge-out">Struck-through = eliminated</span> (points already banked).</p>
   <div class="grid" id="squads"></div>
 
   <hr class="sep" />
 
-  <h2 class="sec">Knockout Tracker</h2>
-  <p class="sub">For whoever's keeping score: flip a team's furthest round as the bracket plays out, set the champion + Golden Boot at the end, then hit <b>Save &amp; Export</b> and send the file to Brian to publish for everyone. Points are cumulative and credited to the owner automatically.</p>
+  <h2 class="sec">Scorekeeper</h2>
+  <p class="sub">For whoever's keeping score: tap the winner of each match. The bracket auto-fills the next round and the standings update instantly. Set the Golden Boot at the end (champion bonus is automatic from the final). Then <b>Save &amp; Export</b> and send the file to Brian to publish for everyone.</p>
   <div class="adminbar">
     <button id="toggleAdmin" class="go">✎ Open scorekeeper</button>
-    <button id="saveBtn" class="hidden">⤓ Save &amp; Export data</button>
+    <button id="saveBtn" class="hidden">⤓ Save &amp; Export</button>
     <button id="resetBtn" class="hidden">↺ Reset to published</button>
     <span class="mono" id="adminMsg" style="color:var(--mut);font-size:12px"></span>
   </div>
@@ -154,47 +173,37 @@
 
   <h2 class="sec">Scoring &amp; Bonuses</h2>
   <div class="rules">
-    <div class="card">
-      <h3>Group Stage</h3>
+    <div class="card"><h3>Group Stage</h3>
       <div class="rule"><span>Win</span><span class="v">3</span></div>
       <div class="rule"><span>Draw</span><span class="v">1</span></div>
-      <div class="rule"><span>Clean sheet (bonus)</span><span class="v">+1</span></div>
-    </div>
-    <div class="card">
-      <h3>Knockout (cumulative)</h3>
+      <div class="rule"><span>Clean sheet (bonus)</span><span class="v">+1</span></div></div>
+    <div class="card"><h3>Knockout (cumulative)</h3>
       <div class="rule"><span>Reach Round of 32</span><span class="v">3</span></div>
       <div class="rule"><span>Reach Round of 16</span><span class="v">5</span></div>
       <div class="rule"><span>Reach Quarterfinal</span><span class="v">7</span></div>
       <div class="rule"><span>Reach Semifinal</span><span class="v">10</span></div>
       <div class="rule"><span>Reach Final</span><span class="v">15</span></div>
-      <div class="rule"><span>Win the World Cup</span><span class="v">25</span></div>
-    </div>
-    <div class="card">
-      <h3>Bonus Picks</h3>
+      <div class="rule"><span>Win the World Cup</span><span class="v">25</span></div></div>
+    <div class="card"><h3>Bonus Picks</h3>
       <div class="rule"><span>Correct Champion</span><span class="v">10</span></div>
-      <div class="rule"><span>Correct Golden Boot</span><span class="v">5</span></div>
-    </div>
-    <div class="card">
-      <h3>Bonus Status</h3>
+      <div class="rule"><span>Correct Golden Boot</span><span class="v">5</span></div></div>
+    <div class="card"><h3>Bonus Status</h3>
       <div class="rule"><span>Actual Champion</span><span class="v" id="champVal">— TBD —</span></div>
-      <div class="rule"><span>Actual Golden Boot</span><span class="v" id="gbVal">— TBD —</span></div>
-    </div>
+      <div class="rule"><span>Actual Golden Boot</span><span class="v" id="gbVal">— TBD —</span></div></div>
   </div>
   <div class="note"><b>Milestones stack.</b> Advancing out of the group = 3 pts. A team that reaches the Final has earned 3+5+7+10+15 = 40 pts, plus 25 more if they win it (65 total). Round of 32 doesn't count as a knockout win for tiebreakers — those start at the Round of 16.</div>
 
   <div class="foot">
-    8-PERSON SNAKE DRAFT · 6 TEAMS EACH · 48 TEAMS · ALL TIMES YOUR LOCAL<br>
-    Group stage verified vs official FIFA results · Built for the group chat
+    8-PERSON SNAKE DRAFT · 6 TEAMS EACH · 48 TEAMS<br>
+    Group stage verified vs official FIFA results · Bracket per FIFA · Built for the group chat
   </div>
 </div>
 
 <script>
 /* ============================================================
-   DATA  (the single source of truth — edit here / via scorekeeper)
-   gp = base group points (3*W + 1*D)   cs = clean sheets
-   reached: GROUP | R32 | R16 | QF | SF | F | WON
+   DATA — single source of truth
    ============================================================ */
-const META = { updated: "2026-06-28", actualChampion: null, actualGoldenBoot: null };
+const META = { updated: "2026-06-28", actualGoldenBoot: null };
 
 const PLAYERS = [
   { name:"GARLAND", color:"#3b82f6", champion:"France",      goldenBoot:"Mbappé" },
@@ -207,233 +216,274 @@ const PLAYERS = [
   { name:"SWEEN",   color:"#ec4899", champion:"Netherlands", goldenBoot:"Mbappé" },
 ];
 
-// owner, group, gp, cs, gf, ga, reached
+// owner, group, gp (3W+1D base), cs (clean sheets), gf, ga
 const TEAMS = [
-  // Group A
-  {name:"Mexico",owner:"HALE",grp:"A",gp:9,cs:3,gf:6,ga:0,reached:"R32"},
-  {name:"South Africa",owner:"SWEEN",grp:"A",gp:4,cs:1,gf:2,ga:3,reached:"R32"},
-  {name:"South Korea",owner:"JP",grp:"A",gp:3,cs:0,gf:2,ga:3,reached:"GROUP"},
-  {name:"Czechia",owner:"TROW",grp:"A",gp:1,cs:0,gf:2,ga:6,reached:"GROUP"},
-  // Group B
-  {name:"Switzerland",owner:"GARLAND",grp:"B",gp:7,cs:0,gf:7,ga:3,reached:"R32"},
-  {name:"Canada",owner:"JC",grp:"B",gp:4,cs:1,gf:8,ga:3,reached:"R32"},
-  {name:"Bosnia & Herzegovina",owner:"DRAKE",grp:"B",gp:4,cs:0,gf:5,ga:6,reached:"R32"},
-  {name:"Qatar",owner:"HALE",grp:"B",gp:1,cs:0,gf:2,ga:10,reached:"GROUP"},
-  // Group C
-  {name:"Brazil",owner:"JP",grp:"C",gp:7,cs:2,gf:7,ga:1,reached:"R32"},
-  {name:"Morocco",owner:"JP",grp:"C",gp:7,cs:1,gf:6,ga:3,reached:"R32"},
-  {name:"Scotland",owner:"DRAKE",grp:"C",gp:3,cs:1,gf:1,ga:4,reached:"GROUP"},
-  {name:"Haiti",owner:"DRAKE",grp:"C",gp:0,cs:0,gf:2,ga:8,reached:"GROUP"},
-  // Group D
-  {name:"United States",owner:"DRAKE",grp:"D",gp:6,cs:1,gf:8,ga:4,reached:"R32"},
-  {name:"Australia",owner:"HALE",grp:"D",gp:4,cs:2,gf:2,ga:2,reached:"R32"},
-  {name:"Paraguay",owner:"GARLAND",grp:"D",gp:4,cs:2,gf:2,ga:4,reached:"R32"},
-  {name:"Türkiye",owner:"TROW",grp:"D",gp:3,cs:0,gf:3,ga:5,reached:"GROUP"},
-  // Group E
-  {name:"Germany",owner:"JC",grp:"E",gp:6,cs:0,gf:10,ga:4,reached:"R32"},
-  {name:"Ivory Coast",owner:"SWEEN",grp:"E",gp:6,cs:2,gf:4,ga:2,reached:"R32"},
-  {name:"Ecuador",owner:"GARLAND",grp:"E",gp:4,cs:1,gf:2,ga:2,reached:"R32"},
-  {name:"Curaçao",owner:"GARLAND",grp:"E",gp:1,cs:1,gf:1,ga:9,reached:"GROUP"},
-  // Group F
-  {name:"Netherlands",owner:"SWEEN",grp:"F",gp:7,cs:0,gf:10,ga:4,reached:"R32"},
-  {name:"Japan",owner:"HALE",grp:"F",gp:5,cs:1,gf:7,ga:3,reached:"R32"},
-  {name:"Sweden",owner:"SWEEN",grp:"F",gp:4,cs:0,gf:7,ga:7,reached:"R32"},
-  {name:"Tunisia",owner:"SMALLS",grp:"F",gp:0,cs:0,gf:2,ga:12,reached:"GROUP"},
-  // Group G
-  {name:"Belgium",owner:"SWEEN",grp:"G",gp:5,cs:1,gf:6,ga:2,reached:"R32"},
-  {name:"Egypt",owner:"JC",grp:"G",gp:5,cs:0,gf:5,ga:3,reached:"R32"},
-  {name:"Iran",owner:"HALE",grp:"G",gp:3,cs:1,gf:3,ga:3,reached:"GROUP"},
-  {name:"New Zealand",owner:"SWEEN",grp:"G",gp:1,cs:0,gf:4,ga:10,reached:"GROUP"},
-  // Group H
-  {name:"Spain",owner:"HALE",grp:"H",gp:7,cs:3,gf:5,ga:0,reached:"R32"},
-  {name:"Cape Verde",owner:"JP",grp:"H",gp:3,cs:2,gf:2,ga:2,reached:"R32"},
-  {name:"Uruguay",owner:"TROW",grp:"H",gp:2,cs:0,gf:3,ga:4,reached:"GROUP"},
-  {name:"Saudi Arabia",owner:"JP",grp:"H",gp:2,cs:1,gf:1,ga:5,reached:"GROUP"},
-  // Group I
-  {name:"France",owner:"GARLAND",grp:"I",gp:9,cs:1,gf:10,ga:2,reached:"R32"},
-  {name:"Norway",owner:"SMALLS",grp:"I",gp:6,cs:0,gf:8,ga:7,reached:"R32"},
-  {name:"Senegal",owner:"JP",grp:"I",gp:3,cs:1,gf:8,ga:6,reached:"R32"},
-  {name:"Iraq",owner:"SMALLS",grp:"I",gp:0,cs:0,gf:1,ga:12,reached:"GROUP"},
-  // Group J
-  {name:"Argentina",owner:"DRAKE",grp:"J",gp:9,cs:2,gf:8,ga:1,reached:"R32"},
-  {name:"Austria",owner:"DRAKE",grp:"J",gp:4,cs:0,gf:6,ga:6,reached:"R32"},
-  {name:"Algeria",owner:"GARLAND",grp:"J",gp:4,cs:0,gf:5,ga:7,reached:"R32"},
-  {name:"Jordan",owner:"TROW",grp:"J",gp:0,cs:0,gf:3,ga:8,reached:"GROUP"},
-  // Group K
-  {name:"Colombia",owner:"JC",grp:"K",gp:7,cs:2,gf:4,ga:1,reached:"R32"},
-  {name:"Portugal",owner:"TROW",grp:"K",gp:5,cs:2,gf:6,ga:1,reached:"R32"},
-  {name:"DR Congo",owner:"JC",grp:"K",gp:4,cs:0,gf:4,ga:3,reached:"R32"},
-  {name:"Uzbekistan",owner:"TROW",grp:"K",gp:0,cs:0,gf:2,ga:11,reached:"GROUP"},
-  // Group L
-  {name:"England",owner:"SMALLS",grp:"L",gp:7,cs:2,gf:6,ga:2,reached:"R32"},
-  {name:"Croatia",owner:"SMALLS",grp:"L",gp:6,cs:1,gf:5,ga:5,reached:"R32"},
-  {name:"Ghana",owner:"SMALLS",grp:"L",gp:4,cs:2,gf:2,ga:2,reached:"R32"},
-  {name:"Panama",owner:"JC",grp:"L",gp:0,cs:0,gf:0,ga:4,reached:"GROUP"},
+  {name:"Mexico",owner:"HALE",grp:"A",gp:9,cs:3,gf:6,ga:0},
+  {name:"South Africa",owner:"SWEEN",grp:"A",gp:4,cs:1,gf:2,ga:3},
+  {name:"South Korea",owner:"JP",grp:"A",gp:3,cs:0,gf:2,ga:3},
+  {name:"Czechia",owner:"TROW",grp:"A",gp:1,cs:0,gf:2,ga:6},
+  {name:"Switzerland",owner:"GARLAND",grp:"B",gp:7,cs:0,gf:7,ga:3},
+  {name:"Canada",owner:"JC",grp:"B",gp:4,cs:1,gf:8,ga:3},
+  {name:"Bosnia & Herzegovina",owner:"DRAKE",grp:"B",gp:4,cs:0,gf:5,ga:6},
+  {name:"Qatar",owner:"HALE",grp:"B",gp:1,cs:0,gf:2,ga:10},
+  {name:"Brazil",owner:"JP",grp:"C",gp:7,cs:2,gf:7,ga:1},
+  {name:"Morocco",owner:"JP",grp:"C",gp:7,cs:1,gf:6,ga:3},
+  {name:"Scotland",owner:"DRAKE",grp:"C",gp:3,cs:1,gf:1,ga:4},
+  {name:"Haiti",owner:"DRAKE",grp:"C",gp:0,cs:0,gf:2,ga:8},
+  {name:"United States",owner:"DRAKE",grp:"D",gp:6,cs:1,gf:8,ga:4},
+  {name:"Australia",owner:"HALE",grp:"D",gp:4,cs:2,gf:2,ga:2},
+  {name:"Paraguay",owner:"GARLAND",grp:"D",gp:4,cs:2,gf:2,ga:4},
+  {name:"Türkiye",owner:"TROW",grp:"D",gp:3,cs:0,gf:3,ga:5},
+  {name:"Germany",owner:"JC",grp:"E",gp:6,cs:0,gf:10,ga:4},
+  {name:"Ivory Coast",owner:"SWEEN",grp:"E",gp:6,cs:2,gf:4,ga:2},
+  {name:"Ecuador",owner:"GARLAND",grp:"E",gp:4,cs:1,gf:2,ga:2},
+  {name:"Curaçao",owner:"GARLAND",grp:"E",gp:1,cs:1,gf:1,ga:9},
+  {name:"Netherlands",owner:"SWEEN",grp:"F",gp:7,cs:0,gf:10,ga:4},
+  {name:"Japan",owner:"HALE",grp:"F",gp:5,cs:1,gf:7,ga:3},
+  {name:"Sweden",owner:"SWEEN",grp:"F",gp:4,cs:0,gf:7,ga:7},
+  {name:"Tunisia",owner:"SMALLS",grp:"F",gp:0,cs:0,gf:2,ga:12},
+  {name:"Belgium",owner:"SWEEN",grp:"G",gp:5,cs:1,gf:6,ga:2},
+  {name:"Egypt",owner:"JC",grp:"G",gp:5,cs:0,gf:5,ga:3},
+  {name:"Iran",owner:"HALE",grp:"G",gp:3,cs:1,gf:3,ga:3},
+  {name:"New Zealand",owner:"SWEEN",grp:"G",gp:1,cs:0,gf:4,ga:10},
+  {name:"Spain",owner:"HALE",grp:"H",gp:7,cs:3,gf:5,ga:0},
+  {name:"Cape Verde",owner:"JP",grp:"H",gp:3,cs:2,gf:2,ga:2},
+  {name:"Uruguay",owner:"TROW",grp:"H",gp:2,cs:0,gf:3,ga:4},
+  {name:"Saudi Arabia",owner:"JP",grp:"H",gp:2,cs:1,gf:1,ga:5},
+  {name:"France",owner:"GARLAND",grp:"I",gp:9,cs:1,gf:10,ga:2},
+  {name:"Norway",owner:"SMALLS",grp:"I",gp:6,cs:0,gf:8,ga:7},
+  {name:"Senegal",owner:"JP",grp:"I",gp:3,cs:1,gf:8,ga:6},
+  {name:"Iraq",owner:"SMALLS",grp:"I",gp:0,cs:0,gf:1,ga:12},
+  {name:"Argentina",owner:"DRAKE",grp:"J",gp:9,cs:2,gf:8,ga:1},
+  {name:"Austria",owner:"DRAKE",grp:"J",gp:4,cs:0,gf:6,ga:6},
+  {name:"Algeria",owner:"GARLAND",grp:"J",gp:4,cs:0,gf:5,ga:7},
+  {name:"Jordan",owner:"TROW",grp:"J",gp:0,cs:0,gf:3,ga:8},
+  {name:"Colombia",owner:"JC",grp:"K",gp:7,cs:2,gf:4,ga:1},
+  {name:"Portugal",owner:"TROW",grp:"K",gp:5,cs:2,gf:6,ga:1},
+  {name:"DR Congo",owner:"JC",grp:"K",gp:4,cs:0,gf:4,ga:3},
+  {name:"Uzbekistan",owner:"TROW",grp:"K",gp:0,cs:0,gf:2,ga:11},
+  {name:"England",owner:"SMALLS",grp:"L",gp:7,cs:2,gf:6,ga:2},
+  {name:"Croatia",owner:"SMALLS",grp:"L",gp:6,cs:1,gf:5,ga:5},
+  {name:"Ghana",owner:"SMALLS",grp:"L",gp:4,cs:2,gf:2,ga:2},
+  {name:"Panama",owner:"JC",grp:"L",gp:0,cs:0,gf:0,ga:4},
+];
+
+// Knockout bracket (FIFA match numbers). slot = {team} for R32, {win:matchId} otherwise.
+// winner: null until decided. R32 dates/venues for the fixtures view.
+const MATCHES = [
+  {id:73,round:"R32",a:{team:"South Africa"},b:{team:"Canada"},date:"Jun 28",venue:"Inglewood",winner:null},
+  {id:74,round:"R32",a:{team:"Germany"},b:{team:"Paraguay"},date:"Jun 29",venue:"Foxborough",winner:null},
+  {id:75,round:"R32",a:{team:"Netherlands"},b:{team:"Morocco"},date:"Jun 29",venue:"Guadalupe",winner:null},
+  {id:76,round:"R32",a:{team:"Brazil"},b:{team:"Japan"},date:"Jun 29",venue:"Houston",winner:null},
+  {id:77,round:"R32",a:{team:"France"},b:{team:"Sweden"},date:"Jun 30",venue:"East Rutherford",winner:null},
+  {id:78,round:"R32",a:{team:"Ivory Coast"},b:{team:"Norway"},date:"Jun 30",venue:"Arlington",winner:null},
+  {id:79,round:"R32",a:{team:"Mexico"},b:{team:"Ecuador"},date:"Jun 30",venue:"Mexico City",winner:null},
+  {id:80,round:"R32",a:{team:"England"},b:{team:"DR Congo"},date:"Jul 1",venue:"Atlanta",winner:null},
+  {id:81,round:"R32",a:{team:"United States"},b:{team:"Bosnia & Herzegovina"},date:"Jul 1",venue:"Santa Clara",winner:null},
+  {id:82,round:"R32",a:{team:"Belgium"},b:{team:"Senegal"},date:"Jul 1",venue:"Seattle",winner:null},
+  {id:83,round:"R32",a:{team:"Portugal"},b:{team:"Croatia"},date:"Jul 2",venue:"Toronto",winner:null},
+  {id:84,round:"R32",a:{team:"Spain"},b:{team:"Austria"},date:"Jul 2",venue:"Inglewood",winner:null},
+  {id:85,round:"R32",a:{team:"Switzerland"},b:{team:"Algeria"},date:"Jul 2",venue:"Vancouver",winner:null},
+  {id:86,round:"R32",a:{team:"Argentina"},b:{team:"Cape Verde"},date:"Jul 3",venue:"Miami Gardens",winner:null},
+  {id:87,round:"R32",a:{team:"Colombia"},b:{team:"Ghana"},date:"Jul 3",venue:"Kansas City",winner:null},
+  {id:88,round:"R32",a:{team:"Australia"},b:{team:"Egypt"},date:"Jul 3",venue:"Arlington",winner:null},
+  {id:89,round:"R16",a:{win:74},b:{win:77},winner:null},
+  {id:90,round:"R16",a:{win:73},b:{win:75},winner:null},
+  {id:91,round:"R16",a:{win:76},b:{win:78},winner:null},
+  {id:92,round:"R16",a:{win:79},b:{win:80},winner:null},
+  {id:93,round:"R16",a:{win:83},b:{win:84},winner:null},
+  {id:94,round:"R16",a:{win:81},b:{win:82},winner:null},
+  {id:95,round:"R16",a:{win:86},b:{win:88},winner:null},
+  {id:96,round:"R16",a:{win:85},b:{win:87},winner:null},
+  {id:97,round:"QF",a:{win:89},b:{win:90},winner:null},
+  {id:98,round:"QF",a:{win:93},b:{win:94},winner:null},
+  {id:99,round:"QF",a:{win:91},b:{win:92},winner:null},
+  {id:100,round:"QF",a:{win:95},b:{win:96},winner:null},
+  {id:101,round:"SF",a:{win:97},b:{win:98},winner:null},
+  {id:102,round:"SF",a:{win:99},b:{win:100},winner:null},
+  {id:104,round:"F",a:{win:101},b:{win:102},winner:null},
 ];
 
 /* ============================================================
-   SCORING ENGINE
+   ENGINE
    ============================================================ */
-const STAGES = ["GROUP","R32","R16","QF","SF","F","WON"];
-const STAGE_LABEL = {GROUP:"Out (group)",R32:"Round of 32",R16:"Round of 16",QF:"Quarterfinal",SF:"Semifinal",F:"Final",WON:"Champion"};
-const STAGE_SHORT = {GROUP:"—",R32:"R32",R16:"R16",QF:"QF",SF:"SF",F:"FINAL",WON:"🏆 WON"};
-const MILESTONE = {R32:3,R16:5,QF:7,SF:10,F:15,WON:25};
-// cumulative knockout points for reaching a stage
-function koPoints(reached){
-  let total=0; for(const s of ["R32","R16","QF","SF","F","WON"]){ if(STAGES.indexOf(reached)>=STAGES.indexOf(s)) total+=MILESTONE[s]; }
-  return total;
-}
-// knockout wins for tiebreaker (R16 onward): reaching QF=1, SF=2, F=3, WON=4
-function koWins(reached){ const i=STAGES.indexOf(reached); const qf=STAGES.indexOf("QF"); return i>=qf? (i-qf+1):0; }
-function teamTotal(t){ return t.gp + t.cs + koPoints(t.reached); }
-function isAlive(t){ return t.reached!=="GROUP" && t.reached!=="WON" ? true : t.reached!=="GROUP"; }
-function stillIn(t){ return t.reached!=="GROUP"; } // banked points; alive unless eliminated mid-knockout (handled when a sibling advances)
-
-let STATE = loadState();
-
-function computeStandings(){
-  return PLAYERS.map(p=>{
-    const ts = TEAMS.filter(t=>t.owner===p.name);
-    let group=0, ko=0, gf=0, ga=0, wins=0, adv=0;
-    ts.forEach(t=>{ group+=t.gp+t.cs; ko+=koPoints(t.reached); gf+=t.gf; ga+=t.ga; wins+=koWins(t.reached); if(t.reached!=="GROUP") adv++; });
-    let bonus=0; const ownsChamp = META.actualChampion && ts.some(t=>t.name===META.actualChampion);
-    if(ownsChamp) bonus+=10;
-    if(META.actualGoldenBoot && p.goldenBoot && norm(META.actualGoldenBoot)===norm(p.goldenBoot)) bonus+=5;
-    return {p, ts, group, ko, bonus, gf, ga, wins, adv, ownsChamp, total:group+ko+bonus};
-  }).sort((a,b)=>
-    b.total-a.total || (b.ownsChamp-a.ownsChamp) || (b.wins-a.wins) || (b.gf-a.gf) || (a.ga-b.ga)
-  );
-}
+const STAGES=["GROUP","R32","R16","QF","SF","F","WON"];
+const AFTER={R32:"R16",R16:"QF",QF:"SF",SF:"F",F:"WON"};
+const ROUND_NAME={R32:"Round of 32",R16:"Round of 16",QF:"Quarterfinals",SF:"Semifinals",F:"Final"};
+const STAGE_SHORT={GROUP:"—",R32:"R32",R16:"R16",QF:"QF",SF:"SF",F:"FINAL",WON:"🏆 WON"};
+const MILESTONE={R32:3,R16:5,QF:7,SF:10,F:15,WON:25};
+function koPoints(stage){let t=0;for(const s of["R32","R16","QF","SF","F","WON"]){if(STAGES.indexOf(stage)>=STAGES.indexOf(s))t+=MILESTONE[s];}return t;}
+function koWins(stage){const i=STAGES.indexOf(stage),qf=STAGES.indexOf("QF");return i>=qf?(i-qf+1):0;}
+const teamByName=n=>TEAMS.find(t=>t.name===n);
+const playerByName=n=>PLAYERS.find(p=>p.name===n);
+const ownerOf=n=>{const t=teamByName(n);return t?playerByName(t.owner):null;};
 function norm(s){return (s||"").toLowerCase().replace(/[^a-z]/g,"");}
+
+// Resolve a bracket from current MATCHES winners. Returns {stage, elim, slotTeam, champion}.
+function computeBracket(){
+  const stage={}, elim=new Set(), winners={};
+  MATCHES.filter(m=>m.round==="R32").forEach(m=>{stage[m.a.team]="R32";stage[m.b.team]="R32";});
+  const slot=(s)=> s.team!==undefined ? s.team : (winners[s.win]||null);
+  [...MATCHES].sort((x,y)=>x.id-y.id).forEach(m=>{
+    const a=slot(m.a), b=slot(m.b);
+    m._a=a; m._b=b;                                   // cache resolved participants for render
+    if(m.winner && m.winner!==a && m.winner!==b) m.winner=null;  // upstream changed -> invalidate
+    if(m.winner){ winners[m.id]=m.winner; const loser=m.winner===a?b:a;
+      stage[m.winner]=AFTER[m.round]; if(loser) elim.add(loser); }
+  });
+  return {stage, elim, winners, champion:winners[104]||null};
+}
+function stageOf(name,B){return B.stage[name]||"GROUP";}
+function teamTotal(name,B){const t=teamByName(name);return t.gp+t.cs+koPoints(stageOf(name,B));}
+
+function computeStandings(B){
+  return PLAYERS.map(p=>{
+    const ts=TEAMS.filter(t=>t.owner===p.name);
+    let group=0,ko=0,gf=0,ga=0,wins=0,alive=0;
+    ts.forEach(t=>{const st=stageOf(t.name,B);group+=t.gp+t.cs;ko+=koPoints(st);gf+=t.gf;ga+=t.ga;wins+=koWins(st);
+      if(st!=="GROUP" && !B.elim.has(t.name)) alive++;});
+    let bonus=0; const ownsChamp=B.champion && ts.some(t=>t.name===B.champion); if(ownsChamp)bonus+=10;
+    if(META.actualGoldenBoot && norm(META.actualGoldenBoot)===norm(p.goldenBoot)) bonus+=5;
+    return {p,ts,group,ko,bonus,gf,ga,wins,alive,ownsChamp,total:group+ko+bonus};
+  }).sort((a,b)=> b.total-a.total || (b.ownsChamp-a.ownsChamp) || (b.wins-a.wins) || (b.gf-a.gf) || (a.ga-b.ga));
+}
 
 /* ============================================================
    RENDER
    ============================================================ */
 function render(){
-  // chips
-  document.getElementById("chips").innerHTML = PLAYERS.map(p=>
-    `<span class="chip" style="background:${p.color}">${p.name}</span>`).join("");
-  document.getElementById("updated").textContent = META.updated;
-  document.getElementById("champVal").textContent = META.actualChampion||"— TBD —";
-  document.getElementById("gbVal").textContent = META.actualGoldenBoot||"— TBD —";
+  const B=computeBracket();
+  document.getElementById("chips").innerHTML=PLAYERS.map(p=>`<span class="chip" style="background:${p.color}">${p.name}</span>`).join("");
+  document.getElementById("updated").textContent=META.updated;
+  document.getElementById("champVal").textContent=B.champion||"— TBD —";
+  document.getElementById("gbVal").textContent=META.actualGoldenBoot||"— TBD —";
+  // phase label = furthest active round
+  let phase="Round of 32"; for(const m of MATCHES){ if(m.winner) phase=ROUND_NAME[AFTER[m.round]]==="WON"?"Champion crowned":ROUND_NAME[m.round]; }
+  document.getElementById("phase").textContent = B.champion? "Tournament complete" : phase;
 
-  const S = computeStandings();
-  // standings
-  document.getElementById("standings").innerHTML = S.map((r,i)=>{
-    const p=r.p;
-    const tie = i>0 && S[i-1].total===r.total;
-    return `<div class="row ${i===0?'lead':''}">
+  const S=computeStandings(B);
+  document.getElementById("standings").innerHTML=S.map((r,i)=>`
+    <div class="row ${i===0?'lead':''}">
       <div class="rank">${i+1}</div>
-      <div class="who">
-        <span class="dot" style="background:${p.color}"></span>
-        <div style="min-width:0">
-          <div class="name">${p.name}</div>
-          <div class="meta">
-            <span>Group ${r.group}</span>
-            <span class="live">+${r.ko} KO</span>
-            ${r.bonus?`<span style="color:var(--gold)">+${r.bonus} bonus</span>`:``}
-            <span>${r.adv} alive</span>
-            <span>GF ${r.gf} · GA ${r.ga}</span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pts">${r.total}<small>PTS</small></div>
-      </div>
-    </div>`;
-  }).join("");
+      <div class="who"><span class="dot" style="background:${r.p.color}"></span>
+        <div style="min-width:0"><div class="name">${r.p.name}</div>
+          <div class="meta"><span>Group ${r.group}</span><span class="live">+${r.ko} KO</span>
+          ${r.bonus?`<span style="color:var(--gold)">+${r.bonus} bonus</span>`:``}
+          <span>${r.alive} alive</span><span>GF ${r.gf} · GA ${r.ga}</span></div></div></div>
+      <div class="pts">${r.total}<small>PTS</small></div>
+    </div>`).join("");
 
-  // squads
-  const order=[...PLAYERS].sort((a,b)=>{
-    const ra=S.findIndex(x=>x.p.name===a.name), rb=S.findIndex(x=>x.p.name===b.name); return ra-rb;});
-  document.getElementById("squads").innerHTML = order.map(p=>{
+  renderFixtures(B);
+
+  const order=[...PLAYERS].sort((a,b)=>S.findIndex(x=>x.p.name===a.name)-S.findIndex(x=>x.p.name===b.name));
+  document.getElementById("squads").innerHTML=order.map(p=>{
     const r=S.find(x=>x.p.name===p.name);
-    const teamRows = r.ts.slice().sort((a,b)=>teamTotal(b)-teamTotal(a)).map(t=>{
-      const out = t.reached==="GROUP";
+    const rows=r.ts.slice().sort((a,b)=>teamTotal(b.name,B)-teamTotal(a.name,B)).map(t=>{
+      const st=stageOf(t.name,B); const out = st==="GROUP" || B.elim.has(t.name);
       return `<div class="t ${out?'outt':''}">
         <div class="tn"><b>${t.name}</b> <span class="lbl" style="background:${p.color}">${t.grp}</span></div>
-        <div class="stg ${out?'badge-out':'badge-adv'}">${STAGE_SHORT[t.reached]}</div>
-        <div class="tp">${teamTotal(t)}</div>
-      </div>`;
+        <div class="stg ${out?'badge-out':'badge-adv'}">${STAGE_SHORT[st]}</div>
+        <div class="tp">${teamTotal(t.name,B)}</div></div>`;
     }).join("");
     return `<div class="card" style="border-left-color:${p.color}">
       <div class="ch"><div><div class="nm">${p.name}</div>
-        <div class="picks">🏆 ${p.champion} · 👟 ${p.goldenBoot}</div></div>
-        <div class="tot">${r.total}</div></div>
-      <div class="teams">${teamRows}</div>
-    </div>`;
+        <div class="picks">🏆 ${p.champion} · 👟 ${p.goldenBoot}</div></div><div class="tot">${r.total}</div></div>
+      <div class="teams">${rows}</div></div>`;
   }).join("");
 }
 
+function fxSide(name,B,right){
+  const o=ownerOf(name); const st=stageOf(name,B); const won=st!=="R32"&&st!=="GROUP";
+  const lost=B.elim.has(name);
+  const cls=won?"win":(lost?"lose":"");
+  const own=`<span class="fxown" style="background:${o.color}">${o.name}</span>`;
+  const nm=`<div class="fxnm ${cls}">${name}</div>`;
+  return `<div class="fxside ${right?'r':''}">${nm}${own}</div>`;
+}
+function renderFixtures(B){
+  const r32=MATCHES.filter(m=>m.round==="R32");
+  const html=r32.map(m=>{
+    const oa=ownerOf(m._a), ob=ownerOf(m._b);
+    const civil=oa.name===ob.name;
+    const decided=!!m.winner;
+    const tag = civil? `★ CIVIL WAR · ${oa.name} +5` : (decided? `${m.winner} advance` : "");
+    const mid=decided? `<span class="score">✓</span>` : `<span class="vsbadge">vs</span>`;
+    return `<div class="fxcard ${civil?'civil':''}">
+      <div class="fxhead"><span>M${m.id} · ${m.date} · ${m.venue}</span><span class="tag">${tag}</span></div>
+      <div class="fxrow">${fxSide(m._a,B,false)}${mid}${fxSide(m._b,B,true)}</div></div>`;
+  }).join("");
+  document.getElementById("fixtures").innerHTML=`<div class="fxgrid">${html}</div>`;
+}
+
 /* ============================================================
-   SCOREKEEPER (admin)
+   SCOREKEEPER
    ============================================================ */
 let adminOpen=false;
+function pickEl(name,sel,right,onclick){
+  if(!name) return `<div class="pick tbd ${right?'r':''}"><span class="pdot" style="background:#333"></span><span>TBD</span></div>`;
+  const o=ownerOf(name);
+  return `<div class="pick ${sel?'sel':''} ${right?'r':''}" data-pick='${name.replace(/'/g,"&#39;")}'>
+    <span class="pdot" style="background:${o.color}"></span><span>${name}</span>
+    <span class="pown" style="background:${o.color}">${o.name}</span></div>`;
+}
 function renderAdmin(){
-  const alive = TEAMS.filter(t=>t.reached!=="GROUP").sort((a,b)=>STAGES.indexOf(b.reached)-STAGES.indexOf(a.reached)||a.name.localeCompare(b.name));
-  const champOpts = ['<option value="">— TBD —</option>'].concat(
-    TEAMS.map(t=>t.name).sort().map(n=>`<option ${META.actualChampion===n?'selected':''}>${n}</option>`)).join("");
-  let html = `<div class="arow" style="background:#0e160e">
-      <div class="an" style="color:var(--gold)">🏆 Actual Champion &nbsp; / &nbsp; 👟 Golden Boot winner</div>
-      <select id="champSel">${champOpts}</select>
-      <input type="text" id="gbSel" placeholder="player name" value="${META.actualGoldenBoot||''}" style="width:130px" />
-    </div>`;
-  html += alive.map(t=>{
-    const p=PLAYERS.find(x=>x.name===t.owner);
-    const opts = STAGES.filter(s=>s!=="GROUP").map(s=>`<option value="${s}" ${t.reached===s?'selected':''}>${STAGE_LABEL[s]}</option>`).join("");
-    return `<div class="arow">
-      <div class="an"><span class="dot" style="background:${p.color}"></span>${t.name}
-        <span class="mono" style="color:var(--mut);font-size:11px">· ${t.owner}</span></div>
-      <select data-team="${t.name}" class="stageSel">${opts}</select>
-      <div class="ap">${teamTotal(t)}</div>
-    </div>`;
-  }).join("");
-  const panel=document.getElementById("adminPanel");
-  panel.innerHTML=html;
-  panel.querySelectorAll(".stageSel").forEach(sel=>sel.addEventListener("change",e=>{
-    const t=TEAMS.find(x=>x.name===e.target.dataset.team); t.reached=e.target.value; persist(); render(); renderAdmin();
-  }));
-  document.getElementById("champSel").addEventListener("change",e=>{META.actualChampion=e.target.value||null;persist();render();renderAdmin();});
+  const B=computeBracket();
+  const rounds=["R32","R16","QF","SF","F"];
+  let html="";
+  rounds.forEach(rd=>{
+    const ms=MATCHES.filter(m=>m.round===rd);
+    html+=`<div class="rndhead">${ROUND_NAME[rd]} &nbsp;·&nbsp; reach ${{R32:"R16 = +5",R16:"QF = +7",QF:"SF = +10",SF:"Final = +15",F:"Champion = +25"}[rd]}</div>`;
+    html+=ms.map(m=>{
+      const a=m._a, b=m._b;
+      return `<div class="mrow" data-match="${m.id}">
+        ${pickEl(a,m.winner===a,false)}
+        <span class="mvs">M${m.id}<br>${m.date||""}</span>
+        ${pickEl(b,m.winner===b,true)}</div>`;
+    }).join("");
+  });
+  html+=`<div class="gbbox"><span class="mono" style="color:var(--gold);font-size:12px">👟 GOLDEN BOOT WINNER (player name):</span>
+    <input type="text" id="gbSel" placeholder="e.g. Mbappé" value="${META.actualGoldenBoot||''}" style="width:150px"/></div>`;
+  const panel=document.getElementById("adminPanel"); panel.innerHTML=html;
+  panel.querySelectorAll(".mrow").forEach(row=>{
+    const id=+row.dataset.match; const m=MATCHES.find(x=>x.id===id);
+    row.querySelectorAll(".pick[data-pick]").forEach(el=>el.addEventListener("click",()=>{
+      const t=el.dataset.pick.replace(/&#39;/g,"'");
+      m.winner = (m.winner===t)? null : t;   // toggle
+      persist(); render(); renderAdmin();
+    }));
+  });
   document.getElementById("gbSel").addEventListener("input",e=>{META.actualGoldenBoot=e.target.value.trim()||null;persist();render();});
 }
 
 document.getElementById("toggleAdmin").addEventListener("click",()=>{
   adminOpen=!adminOpen;
-  document.getElementById("adminPanel").classList.toggle("hidden",!adminOpen);
-  document.getElementById("saveBtn").classList.toggle("hidden",!adminOpen);
-  document.getElementById("resetBtn").classList.toggle("hidden",!adminOpen);
-  document.getElementById("toggleAdmin").textContent = adminOpen? "✕ Close scorekeeper":"✎ Open scorekeeper";
+  ["adminPanel","saveBtn","resetBtn"].forEach(id=>document.getElementById(id).classList.toggle("hidden",!adminOpen));
+  document.getElementById("toggleAdmin").textContent=adminOpen?"✕ Close scorekeeper":"✎ Open scorekeeper";
   if(adminOpen) renderAdmin();
 });
-
 document.getElementById("saveBtn").addEventListener("click",()=>{
-  const data={meta:META,teams:TEAMS.map(t=>({name:t.name,reached:t.reached}))};
+  const data={meta:META,winners:Object.fromEntries(MATCHES.filter(m=>m.winner).map(m=>[m.id,m.winner]))};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
-  a.download=`wc26-results-${META.updated}.json`; a.click();
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`wc26-results-${META.updated}.json`;a.click();
   msg("Saved. Send this file to Brian to publish for everyone.");
 });
-document.getElementById("resetBtn").addEventListener("click",()=>{
-  localStorage.removeItem("wc26state"); location.reload();
-});
+document.getElementById("resetBtn").addEventListener("click",()=>{localStorage.removeItem("wc26state");location.reload();});
 
 function persist(){
-  META.updated = new Date().toISOString().slice(0,10);
-  document.getElementById("updated").textContent = META.updated+" (local draft)";
-  localStorage.setItem("wc26state",JSON.stringify({meta:META,reached:Object.fromEntries(TEAMS.map(t=>[t.name,t.reached]))}));
+  META.updated=new Date().toISOString().slice(0,10);
+  document.getElementById("updated").textContent=META.updated+" (local draft)";
+  localStorage.setItem("wc26state",JSON.stringify({gb:META.actualGoldenBoot,winners:Object.fromEntries(MATCHES.filter(m=>m.winner).map(m=>[m.id,m.winner]))}));
   msg("Local draft saved in this browser. Export to publish.");
 }
 function loadState(){
-  try{
-    const s=JSON.parse(localStorage.getItem("wc26state"));
-    if(s&&s.reached){ TEAMS.forEach(t=>{ if(s.reached[t.name]) t.reached=s.reached[t.name]; });
-      if(s.meta){ META.actualChampion=s.meta.actualChampion??META.actualChampion; META.actualGoldenBoot=s.meta.actualGoldenBoot??META.actualGoldenBoot; }
-      return true; }
+  try{const s=JSON.parse(localStorage.getItem("wc26state"));
+    if(s){ if(s.gb!==undefined)META.actualGoldenBoot=s.gb;
+      if(s.winners)MATCHES.forEach(m=>{if(s.winners[m.id])m.winner=s.winners[m.id];}); }
   }catch(e){}
-  return false;
 }
 function msg(t){const m=document.getElementById("adminMsg");m.textContent=t;clearTimeout(m._t);m._t=setTimeout(()=>m.textContent="",6000);}
 
+loadState();
 render();
 </script>
 </body>
