@@ -134,7 +134,7 @@
 
   <div class="eyebrow">2026 FIFA World Cup · 8-Person Draft Challenge</div>
   <h1 class="title">Every match is<br><span class="g">one of us.</span></h1>
-  <p class="lede">All <b>48 teams</b> drafted across the eight of you. <b>Group stage complete and independently verified</b> against official results. <b>Round of 32 is set</b> — the 32 survivors banked +3, the other 16 are out (points stand). Pick winners as the bracket plays out and the standings move live.</p>
+  <p class="lede">All <b>48 teams</b> drafted across the eight of you. <b>Group stage complete and independently verified</b> against official results. <b>Round of 32 is set</b> — the 32 survivors banked +3, the other 16 are out (points stand). Standings refresh automatically each day as knockout results come in.</p>
 
   <div class="chips" id="chips"></div>
   <div class="updated">● LIVE — <b id="phase">Round of 32</b> · last updated <span id="updated"></span></div>
@@ -160,7 +160,7 @@
   <hr class="sep" />
 
   <h2 class="sec">Scorekeeper</h2>
-  <p class="sub">For whoever's keeping score: tap the winner of each match. The bracket auto-fills the next round and the standings update instantly. Set the Golden Boot at the end (champion bonus is automatic from the final). Then <b>Save &amp; Export</b> and send the file to Brian to publish for everyone.</p>
+  <p class="sub"><b>Scores auto-update daily</b> from official results — you normally don't need this. It's a manual override: tap winners, set the Golden Boot, then <b>Save &amp; Export</b> the <span class="mono">results.json</span> and send it to Brian. (Any export is replaced by the next daily auto-update.)</p>
   <div class="adminbar">
     <button id="toggleAdmin" class="go">✎ Open scorekeeper</button>
     <button id="saveBtn" class="hidden">⤓ Save &amp; Export</button>
@@ -462,29 +462,32 @@ document.getElementById("toggleAdmin").addEventListener("click",()=>{
   if(adminOpen) renderAdmin();
 });
 document.getElementById("saveBtn").addEventListener("click",()=>{
-  const data={meta:META,winners:Object.fromEntries(MATCHES.filter(m=>m.winner).map(m=>[m.id,m.winner]))};
+  const data={updated:new Date().toISOString().slice(0,10),
+    winners:Object.fromEntries(MATCHES.filter(m=>m.winner).map(m=>[m.id,m.winner])),
+    goldenBoot:META.actualGoldenBoot||null};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`wc26-results-${META.updated}.json`;a.click();
-  msg("Saved. Send this file to Brian to publish for everyone.");
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="results.json";a.click();
+  msg("Exported results.json — send it to Brian to publish.");
 });
-document.getElementById("resetBtn").addEventListener("click",()=>{localStorage.removeItem("wc26state");location.reload();});
+document.getElementById("resetBtn").addEventListener("click",()=>{location.reload();});
 
-function persist(){
-  META.updated=new Date().toISOString().slice(0,10);
-  document.getElementById("updated").textContent=META.updated+" (local draft)";
-  localStorage.setItem("wc26state",JSON.stringify({gb:META.actualGoldenBoot,winners:Object.fromEntries(MATCHES.filter(m=>m.winner).map(m=>[m.id,m.winner]))}));
-  msg("Local draft saved in this browser. Export to publish.");
-}
-function loadState(){
-  try{const s=JSON.parse(localStorage.getItem("wc26state"));
-    if(s){ if(s.gb!==undefined)META.actualGoldenBoot=s.gb;
-      if(s.winners)MATCHES.forEach(m=>{if(s.winners[m.id])m.winner=s.winners[m.id];}); }
-  }catch(e){}
-}
-function msg(t){const m=document.getElementById("adminMsg");m.textContent=t;clearTimeout(m._t);m._t=setTimeout(()=>m.textContent="",6000);}
+// In-session draft only (no persistence) — auto-update via results.json is the source of truth.
+function persist(){ msg("Local change — Export results.json to publish, or wait for the daily auto-update."); }
+function msg(t){const m=document.getElementById("adminMsg");m.textContent=t;clearTimeout(m._t);m._t=setTimeout(()=>m.textContent="",7000);}
 
-loadState();
-render();
+// Source of truth: results.json in the repo, refreshed daily by the scheduled updater.
+async function boot(){
+  try{
+    const res=await fetch("results.json?cb="+Date.now(),{cache:"no-store"});
+    if(res.ok){ const d=await res.json();
+      if(d.winners) MATCHES.forEach(m=>{ if(d.winners[m.id]) m.winner=d.winners[m.id]; });
+      if(d.goldenBoot!==undefined && d.goldenBoot!==null) META.actualGoldenBoot=d.goldenBoot;
+      if(d.updated) META.updated=d.updated;
+    }
+  }catch(e){ /* fall back to baked-in defaults */ }
+  render();
+}
+boot();
 </script>
 </body>
 </html>
