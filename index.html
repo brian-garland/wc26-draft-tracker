@@ -134,7 +134,7 @@
 
   <div class="eyebrow">Hale's Claude is a bxtch</div>
   <h1 class="title">Every match is<br><span class="g">one of us.</span></h1>
-  <p class="lede">All <b>48 teams</b> drafted across the eight of you. <b>Group stage complete and independently verified</b> against official results. <b>Round of 32 is set</b> — the 32 survivors banked +3, the other 16 are out (points stand). Standings refresh automatically each day as knockout results come in.</p>
+  <p class="lede">All <b>48 teams</b> drafted across the eight of you. <b>Group stage complete and independently verified</b> against official results. <b>The knockouts are live</b> — the Round of 32 is done and the Round of 16 is underway. Survivors keep banking points; the eliminated hold what they earned. Standings and fixtures refresh automatically each day as knockout results come in.</p>
 
   <div class="chips" id="chips"></div>
   <div class="updated">● LIVE — <b id="phase">Round of 32</b> · last updated <span id="updated"></span></div>
@@ -147,8 +147,8 @@
 
   <hr class="sep" />
 
-  <h2 class="sec">Round of 32 · Fixtures</h2>
-  <p class="sub">Who plays whom, Jun 28 – Jul 3. Every winner banks <b>+5</b> (reaching the Round of 16). <span style="color:var(--gold)">★ CIVIL WAR = one owner owns both sides.</span></p>
+  <h2 class="sec" id="fxTitle">Fixtures</h2>
+  <p class="sub" id="fxSub"></p>
   <div id="fixtures"></div>
 
   <hr class="sep" />
@@ -287,14 +287,14 @@ const MATCHES = [
   {id:86,round:"R32",a:{team:"Argentina"},b:{team:"Cape Verde"},date:"Jul 3",venue:"Miami Gardens",winner:null},
   {id:87,round:"R32",a:{team:"Colombia"},b:{team:"Ghana"},date:"Jul 3",venue:"Kansas City",winner:null},
   {id:88,round:"R32",a:{team:"Australia"},b:{team:"Egypt"},date:"Jul 3",venue:"Arlington",winner:null},
-  {id:89,round:"R16",a:{win:74},b:{win:77},winner:null},
-  {id:90,round:"R16",a:{win:73},b:{win:75},winner:null},
-  {id:91,round:"R16",a:{win:76},b:{win:78},winner:null},
-  {id:92,round:"R16",a:{win:79},b:{win:80},winner:null},
-  {id:93,round:"R16",a:{win:83},b:{win:84},winner:null},
-  {id:94,round:"R16",a:{win:81},b:{win:82},winner:null},
-  {id:95,round:"R16",a:{win:86},b:{win:88},winner:null},
-  {id:96,round:"R16",a:{win:85},b:{win:87},winner:null},
+  {id:89,round:"R16",a:{win:74},b:{win:77},date:"Jul 4",venue:"Philadelphia",winner:null},
+  {id:90,round:"R16",a:{win:73},b:{win:75},date:"Jul 4",venue:"Houston",winner:null},
+  {id:91,round:"R16",a:{win:76},b:{win:78},date:"Jul 5",venue:"East Rutherford",winner:null},
+  {id:92,round:"R16",a:{win:79},b:{win:80},date:"Jul 5",venue:"Mexico City",winner:null},
+  {id:93,round:"R16",a:{win:83},b:{win:84},date:"Jul 6",venue:"Arlington",winner:null},
+  {id:94,round:"R16",a:{win:81},b:{win:82},date:"Jul 6",venue:"Seattle",winner:null},
+  {id:95,round:"R16",a:{win:86},b:{win:88},date:"Jul 7",venue:"Atlanta",winner:null},
+  {id:96,round:"R16",a:{win:85},b:{win:87},date:"Jul 7",venue:"Vancouver",winner:null},
   {id:97,round:"QF",a:{win:89},b:{win:90},winner:null},
   {id:98,round:"QF",a:{win:93},b:{win:94},winner:null},
   {id:99,round:"QF",a:{win:91},b:{win:92},winner:null},
@@ -357,9 +357,8 @@ function render(){
   document.getElementById("updated").textContent=META.updated;
   document.getElementById("champVal").textContent=B.champion||"— TBD —";
   document.getElementById("gbVal").textContent=META.actualGoldenBoot||"— TBD —";
-  // phase label = furthest active round
-  let phase="Round of 32"; for(const m of MATCHES){ if(m.winner) phase=ROUND_NAME[AFTER[m.round]]==="WON"?"Champion crowned":ROUND_NAME[m.round]; }
-  document.getElementById("phase").textContent = B.champion? "Tournament complete" : phase;
+  // phase label = current active knockout round
+  document.getElementById("phase").textContent = B.champion? "Tournament complete" : ROUND_NAME[activeRound()];
 
   const S=computeStandings(B);
   document.getElementById("standings").innerHTML=S.map((r,i)=>`
@@ -392,25 +391,42 @@ function render(){
   }).join("");
 }
 
-function fxSide(name,B,right){
-  const o=ownerOf(name); const st=stageOf(name,B); const won=st!=="R32"&&st!=="GROUP";
-  const lost=B.elim.has(name);
-  const cls=won?"win":(lost?"lose":"");
-  const own=`<span class="fxown" style="background:${o.color}">${o.name}</span>`;
-  const nm=`<div class="fxnm ${cls}">${name}</div>`;
-  return `<div class="fxside ${right?'r':''}">${nm}${own}</div>`;
+// Current active round = first knockout round that still has an undecided match.
+function activeRound(){
+  for(const rd of ["R32","R16","QF","SF","F"]){
+    const ms=MATCHES.filter(m=>m.round===rd);
+    if(ms.length && ms.some(m=>!m.winner)) return rd;
+  }
+  return "F";
+}
+function fxSide(name,m,right){
+  if(!name) return `<div class="fxside ${right?'r':''}"><div class="fxnm" style="opacity:.4">TBD</div></div>`;
+  const o=ownerOf(name);
+  const decided=!!m.winner;
+  const cls = decided ? (m.winner===name?"win":"lose") : "";
+  const own = o?`<span class="fxown" style="background:${o.color}">${o.name}</span>`:"";
+  return `<div class="fxside ${right?'r':''}"><div class="fxnm ${cls}">${name}</div>${own}</div>`;
 }
 function renderFixtures(B){
-  const r32=MATCHES.filter(m=>m.round==="R32");
-  const html=r32.map(m=>{
+  const rd=activeRound();
+  const ms=MATCHES.filter(m=>m.round===rd);
+  const bank={R32:"+5",R16:"+7",QF:"+10",SF:"+15",F:"+25"};
+  const reach={R32:"the Round of 16",R16:"the Quarterfinals",QF:"the Semifinals",SF:"the Final",F:"the World Cup"};
+  const dates={R32:"Jun 28 – Jul 3",R16:"Jul 4 – Jul 7",QF:"Jul 9 – Jul 11",SF:"Jul 14 – Jul 15",F:"Jul 19"};
+  document.getElementById("fxTitle").textContent=`${ROUND_NAME[rd]} · Fixtures`;
+  document.getElementById("fxSub").innerHTML=
+    `Who plays whom, ${dates[rd]}. Every winner banks <b>${bank[rd]}</b> (reaching ${reach[rd]}). `+
+    `<span style="color:var(--gold)">★ CIVIL WAR = one owner owns both sides.</span>`;
+  const html=ms.map(m=>{
     const oa=ownerOf(m._a), ob=ownerOf(m._b);
-    const civil=oa.name===ob.name;
+    const civil = !!oa && !!ob && oa.name===ob.name;
     const decided=!!m.winner;
-    const tag = civil? `★ CIVIL WAR · ${oa.name} +5` : (decided? `${m.winner} advance` : "");
-    const mid=decided? `<span class="score">✓</span>` : `<span class="vsbadge">vs</span>`;
+    const tag = civil? `★ CIVIL WAR · ${oa.name} ${bank[rd]}` : (decided? `${m.winner} advance` : "");
+    const mid = decided? `<span class="score">✓</span>` : `<span class="vsbadge">vs</span>`;
+    const meta=[`M${m.id}`,m.date,m.venue].filter(Boolean).join(" · ");
     return `<div class="fxcard ${civil?'civil':''}">
-      <div class="fxhead"><span>M${m.id} · ${m.date} · ${m.venue}</span><span class="tag">${tag}</span></div>
-      <div class="fxrow">${fxSide(m._a,B,false)}${mid}${fxSide(m._b,B,true)}</div></div>`;
+      <div class="fxhead"><span>${meta}</span><span class="tag">${tag}</span></div>
+      <div class="fxrow">${fxSide(m._a,m,false)}${mid}${fxSide(m._b,m,true)}</div></div>`;
   }).join("");
   document.getElementById("fixtures").innerHTML=`<div class="fxgrid">${html}</div>`;
 }
