@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-06",
+  "updated": "2026-07-07",
   "winners": {
     "73": "Canada",
     "74": "Paraguay",
@@ -20,7 +20,9 @@
     "89": "France",
     "90": "Morocco",
     "91": "Norway",
-    "92": "England"
+    "92": "England",
+    "93": "Spain",
+    "94": "Belgium"
   },
   "goldenBoot": null
 }
