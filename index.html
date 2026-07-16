@@ -342,7 +342,8 @@ function computeStandings(B){
     let group=0,ko=0,gf=0,ga=0,wins=0,alive=0;
     ts.forEach(t=>{const st=stageOf(t.name,B);group+=t.gp+t.cs;ko+=koPoints(st);gf+=t.gf;ga+=t.ga;wins+=koWins(st);
       if(st!=="GROUP" && !B.elim.has(t.name)) alive++;});
-    let bonus=0; const ownsChamp=B.champion && ts.some(t=>t.name===B.champion); if(ownsChamp)bonus+=10;
+    let bonus=0; const ownsChamp=B.champion && ts.some(t=>t.name===B.champion);   // ownsChamp: champion-owner tiebreaker only
+    if(B.champion && norm(p.champion)===norm(B.champion)) bonus+=10;               // +10 = correctly PICKED the champion
     if(META.actualGoldenBoot && norm(META.actualGoldenBoot)===norm(p.goldenBoot)) bonus+=5;
     return {p,ts,group,ko,bonus,gf,ga,wins,alive,ownsChamp,total:group+ko+bonus};
   }).sort((a,b)=> b.total-a.total || (b.ownsChamp-a.ownsChamp) || (b.wins-a.wins) || (b.gf-a.gf) || (a.ga-b.ga));
